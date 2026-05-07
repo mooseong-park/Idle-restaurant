@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85488753a11e4e498466bcbdea0da35c, type: 3}
+  m_Name: Pack_Basic
+  m_EditorClassIdentifier:
+  id: basic
+  displayName: Basic Pack
+  gemCost: 10
+  weights:
+  - rarity: {fileID: 11400000, guid: d27111441c88427e9986facaed33a1fe, type: 2}
+    weight: 0.7
+  - rarity: {fileID: 11400000, guid: 63ae8427a1054c0c8dd3c9e02cdfb4d4, type: 2}
+    weight: 0.25
+  - rarity: {fileID: 11400000, guid: 9bd98c2e055f4c0caf8525a577c41b56, type: 2}
+    weight: 0.05

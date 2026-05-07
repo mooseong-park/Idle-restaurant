@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c70f6064ea46e3849c3f19813bddd1, type: 3}
+  m_Name: Track_Staff
+  m_EditorClassIdentifier:
+  id: staff
+  displayName: 직원
+  icon: 👨‍🍳
+  description: 이동 + 조리 속도 통합
+  axis: 0
+  color: {r: 0.431, g: 0.906, b: 0.718, a: 1}
+  baseCost: 18
+  growth: 1.18
+  maxLv: 0

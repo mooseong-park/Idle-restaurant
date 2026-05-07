@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15992c914217418599cf878b1ada741a, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: 
+  tracks:
+  - {fileID: 11400000, guid: c554cee83ace424eb6607762bfd8f394, type: 2}
+  - {fileID: 11400000, guid: 056d909e356f45a994dd7ab0c74ba7fa, type: 2}
+  - {fileID: 11400000, guid: 5f3311f817954d4f8d2a4645479d0176, type: 2}
+  - {fileID: 11400000, guid: fae14fee9ef64cbc9ad7a0d92c251fc8, type: 2}
+  - {fileID: 11400000, guid: f030e29326ec460eb5d3b19c6778574c, type: 2}
+  - {fileID: 11400000, guid: e6906afd7d6c422e9e0f0653c54f8726, type: 2}
+  - {fileID: 11400000, guid: 755b0e280a33440e9d3dde5e2882cdb9, type: 2}
+  - {fileID: 11400000, guid: 74885b297aec457f87a8a4cb31aa24f7, type: 2}
+  menuItems:
+  - {fileID: 11400000, guid: 40a1813b083360a4992cd458ecfbf574, type: 2}
+  - {fileID: 11400000, guid: 5d2445a7f12a51a4b870f87f73e6c7ab, type: 2}
+  - {fileID: 11400000, guid: c0565b25186fb83439306d7791df33e3, type: 2}
+  rarities:
+  - {fileID: 11400000, guid: d27111441c88427e9986facaed33a1fe, type: 2}
+  - {fileID: 11400000, guid: 63ae8427a1054c0c8dd3c9e02cdfb4d4, type: 2}
+  - {fileID: 11400000, guid: 9bd98c2e055f4c0caf8525a577c41b56, type: 2}
+  staffPacks:
+  - {fileID: 11400000, guid: 6d504b99205341d49d0f0d4c3c86c4cd, type: 2}
+  - {fileID: 11400000, guid: 1c811f8057104566b4e0e951a43b3379, type: 2}
+  repLevelTable: {fileID: 11400000, guid: c584f5daa8f949a0bb08a0acfd416d11, type: 2}
+  initialStaffRarities:
+  - {fileID: 11400000, guid: d27111441c88427e9986facaed33a1fe, type: 2}
+  customerBodySprites:
+  - {fileID: -1011591450997592073, guid: 04aa76cc03564c74799820bdb587ef61, type: 3}
+  - {fileID: 5805690438614653125, guid: 7e506a91adc15514db7e38e8bf2f6b2a, type: 3}
+  - {fileID: 2040236475098586680, guid: 1bb15159b07637a438bd75bd3773d7a0, type: 3}
+  - {fileID: 2906968499190261207, guid: 38d6aec5b0c2c6d4fbf53649f1b9f283, type: 3}
+  - {fileID: 7214026872727820985, guid: 26958b93366aa8c4fb9689108a0a8817, type: 3}
+  dayLengthMs: 75000
+  dayTransitionMs: 3000
+  arrivalIntervalMs: 5000
+  tickMs: 100
+  tArriving: 2000
+  tSeatingSettle: 1900
+  tTakingOrder: 600
+  tServeAction: 400
+  tResult: 1800
+  tLeaving: 2500
+  tEating: 5500
+  tPatienceQueue: 20000
+  tPatienceSeated: 35000
+  tableCount: 3
+  seatsPerTable: 2
+  seatingBase: 2
+  seatingPerLv: 1
+  seatingMax: 6
+  queueBase: 2
+  queuePerLv: 1
+  queueMax: 8
+  maxStaff: 6
+  priceMultPerLv: 0.05
+  staffSpdGrowth: 0.12
+  eatingSpdGrowth: 0.08
+  patiencePerLv: 0.05
+  takeoutPerLv: 0.1
+  adsPerLv: 0.1
+  tipPerLv: 0.1
+  merchPerLv: 0.1
+  gemBaseReward: 1
+  gemGoalBonus: 2
+  tipAmount: 1
+  snapshotMs: 10000
+  firstNames:
+  - Mario
+  - Emma
+  - Kenji
+  - Sofia
+  - Luca
+  - Yuki
+  - Diego
+  - Chen
+  - Anja
+  - Rafael
+  - Mei
+  - Oscar
+  - Priya
+  - Finn
+  - Noa
+  lastNames:
+  - Rossi
+  - Schmidt
+  - Tanaka
+  - Garcia
+  - Kim
+  - Martin
+  - Chen
+  - Silva
+  - Larsen
+  - Khan
+  - Park
+  - Weber
+  - Patel
+  - Olsen
+  - Ito

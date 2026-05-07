@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "PowerShell(1..20 | ForEach-Object { [guid]::NewGuid\\(\\).ToString\\('N'\\) })",
+      "Bash(dotnet build *)",
+      "PowerShell(Get-Command *)",
+      "Bash(git *)",
+      "Bash(mv Assets/_Project/Scripts/Visual/TipPopupView.cs Assets/_Project/Scripts/Visual/RevenuePopupView.cs)",
+      "Bash(mv Assets/_Project/Scripts/Visual/TipPopupView.cs.meta Assets/_Project/Scripts/Visual/RevenuePopupView.cs.meta)",
+      "Bash(python -c \"from PIL import Image; im = Image.open\\('C:/Users/Mooseong/Downloads/Gemini_Generated_Image_mc0lhymc0lhymc0l.png'\\); print\\(im.size, im.mode\\)\")",
+      "Bash(grep -A 15 \"m_Name: Seat_0$\" Assets/_Project/Scenes/Main.unity)"
+    ]
+  }
+}

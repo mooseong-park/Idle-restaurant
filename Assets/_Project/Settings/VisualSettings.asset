@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b4c5d6e7f819203a4b5c6d7e8f90a1b, type: 3}
+  m_Name: VisualSettings
+  m_EditorClassIdentifier:
+  customerMaxSpeed: 1
+  customerAcceleration: 2.5
+  customerBobAmpY: 0.2
+  customerSwayAmpX: 0.02
+  staffMaxSpeed: 1.1
+  staffAcceleration: 3
+  staffBobAmpY: 0.19
+  staffSwayAmpX: 0.02
+  stepsPerUnit: 1.3
+  idleBobFreq: 1.6
+  idleBobAmp: 0.04
+  popupLifeSec: 1.4
+  popupRiseDistance: 0.9
+  popupFontSize: 5
+  popupColor: {r: 0.13, g: 0.65, b: 0.30, a: 1}

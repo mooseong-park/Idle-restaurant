@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6b6cdd5d352ae04f89d20f205e6761c, type: 3}
+  m_Name: MenuItem_Salad
+  m_EditorClassIdentifier: 
+  id: salad
+  icon: "\U0001F957"
+  iconSprite: {fileID: 2828416636386807751, guid: 78083aeba9f48134ab957f0b17f00fea, type: 3}
+  cookTimeMs: 1500
+  basePrice: 2
+  generateProb: 0.3

@@ -1,0 +1,61 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement class="ui-root" picking-mode="Ignore">
+        <ui:VisualElement class="top-card">
+            <ui:VisualElement class="row counters">
+                <ui:Label name="cash" text="💰 $0" class="big cash" />
+                <ui:Label name="gems" text="💎 0" class="big gem" />
+                <ui:Label name="rating" text="⭐ 0" class="big rating" />
+            </ui:VisualElement>
+            <ui:VisualElement class="row day-row">
+                <ui:Label name="day" text="Day 1" class="mid" />
+                <ui:Label name="day-time" text="75s" class="mid" />
+            </ui:VisualElement>
+            <ui:ProgressBar name="time-bar" low-value="0" high-value="100" value="0" class="time-bar" />
+            <ui:Label name="goal" text="Lv 1  $0 / $20" class="mid goal-label" />
+            <ui:ProgressBar name="goal-bar" low-value="0" high-value="100" value="0" class="goal-bar" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="scene-area" class="scene-area" picking-mode="Ignore" />
+
+        <ui:VisualElement class="main-content">
+            <ui:ScrollView name="upgrades-scroll" class="tab-content">
+                <ui:VisualElement class="upgrades-card">
+                    <ui:VisualElement name="track-grid" class="track-grid" />
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:ScrollView name="gacha-scroll" class="tab-content hidden">
+                <ui:VisualElement class="gacha-card">
+                    <ui:Label text="직원 가챠" class="tab-section-title" />
+                    <ui:VisualElement name="gacha-grid" class="gacha-grid" />
+                </ui:VisualElement>
+            </ui:ScrollView>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="bottom-tabs">
+            <ui:VisualElement name="tab-upgrades" class="tab-btn active">
+                <ui:Label text="⚒" class="tab-btn-icon" />
+                <ui:Label text="Upgrades" class="tab-btn-label" />
+            </ui:VisualElement>
+            <ui:VisualElement name="tab-gacha" class="tab-btn">
+                <ui:Label text="🎰" class="tab-btn-icon" />
+                <ui:Label text="Gacha" class="tab-btn-label" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="day-end-overlay" class="overlay">
+            <ui:VisualElement class="modal">
+                <ui:Label name="day-end-title" text="Day 1" class="modal-title" />
+                <ui:Label name="day-end-body" text="" class="modal-body" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="gacha-overlay" class="overlay">
+            <ui:VisualElement class="modal">
+                <ui:VisualElement name="gacha-rarity-badge" class="rarity-badge" />
+                <ui:Label name="gacha-title" text="" class="modal-title" />
+                <ui:Label name="gacha-body" text="" class="modal-body" />
+                <ui:Button name="gacha-close-btn" text="확인" class="modal-close-btn" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

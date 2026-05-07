@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement class="track-card">
+        <ui:VisualElement class="track-card-header">
+            <ui:VisualElement name="icon-box" class="track-card-icon-box">
+                <ui:Label name="icon" class="track-card-icon" text="?" />
+            </ui:VisualElement>
+            <ui:VisualElement class="track-card-title-col">
+                <ui:Label name="name" class="track-card-name" text="" />
+                <ui:Label name="lv-pill" class="track-card-lv-pill" text="Lv 1" />
+            </ui:VisualElement>
+            <ui:Label class="track-card-info" text="ⓘ" />
+        </ui:VisualElement>
+
+        <ui:VisualElement class="track-card-preview-row">
+            <ui:Label name="preview-current" class="track-card-preview-current" text="" />
+            <ui:Label class="track-card-preview-arrow" text="→" />
+            <ui:Label name="preview-next" class="track-card-preview-next" text="" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="upgrade-btn" class="track-upgrade-btn">
+            <ui:Label class="track-upgrade-text" text="Upgrade" />
+            <ui:Label name="upgrade-cost" class="track-upgrade-cost" text="$0" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
