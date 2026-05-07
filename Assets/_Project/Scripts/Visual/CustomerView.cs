@@ -19,11 +19,9 @@ namespace Project.Visual
         [SerializeField] SpriteRenderer sr;
         [SerializeField] SpriteRenderer bodySr;
 
-        // 호환 — 구버전 prefab 의 horizontal patience bar 슬롯. Awake 에서 SetActive(false).
-        // pie patience UI 가 대체. 필드는 남겨 두어 prefab 직렬화 호환.
+        // 호환 — 구버전 prefab 의 PatienceBg child GameObject 슬롯. Awake 에서 SetActive(false).
+        // PiePatience (CustomerUIOverlay) 가 인내심 UI 를 담당하므로 이 horizontal bar 는 사용 안 함.
         [SerializeField] GameObject patienceRoot;
-        [SerializeField] Transform patienceFgT;
-        [SerializeField] SpriteRenderer patienceFgSr;
 
         [Tooltip("VisualSettings.asset (B1) — 비어있으면 클래스 const 폴백.")]
         [SerializeField] VisualSettingsSO visualSettings;

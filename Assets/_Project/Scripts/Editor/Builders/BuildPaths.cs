@@ -22,7 +22,7 @@ namespace Project.EditorTools.Builders
         public const string TrackCardUxmlPath = "Assets/_Project/UI/TrackCard.uxml";
 
         public const string PanelSettingsPath = "Assets/_Project/New Panel Settings.asset";
-        public const string GameEventsPath    = "Assets/_Project/Settings/GameEvents.asset";
+        public const string GameEventsPath    = "Assets/_Project/Settings/Events/GameEvents.asset";
         public const string VisualSettingsPath = "Assets/_Project/Settings/VisualSettings.asset";
     }
 }

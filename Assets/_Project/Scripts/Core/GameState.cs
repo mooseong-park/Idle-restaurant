@@ -22,8 +22,12 @@ namespace Project.Core
             set
             {
                 if (cash == value) return;
+                // 정수 달러 단위로만 이벤트 raise — passive income 의 미세 누적(0.x/frame)이
+                // 매 프레임 string allocation + UI 재평가를 일으키는 GC 압박 회피.
+                // UI는 {F0} 정수 표시 + 트랙 affordability 도 비용 정수 단위라 이 임계값으로 충분.
+                bool intChanged = (int)cash != (int)value;
                 cash = value;
-                events?.RaiseCash(cash);
+                if (intChanged) events?.RaiseCash(cash);
             }
         }
 

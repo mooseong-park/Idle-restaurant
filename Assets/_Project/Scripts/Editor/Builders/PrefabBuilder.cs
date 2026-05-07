@@ -134,8 +134,6 @@ namespace Project.EditorTools.Builders
             BuilderHelpers.AssignRef(so, "sr", bgSr);
             BuilderHelpers.AssignRef(so, "bodySr", bodyRen);
             BuilderHelpers.AssignRef(so, "patienceRoot", pb);
-            BuilderHelpers.AssignRef(so, "patienceFgT", pf.transform);
-            BuilderHelpers.AssignRef(so, "patienceFgSr", pfSr);
             BuilderHelpers.AssignRef(so, "visualSettings", visualSettings);
             so.ApplyModifiedPropertiesWithoutUndo();
 

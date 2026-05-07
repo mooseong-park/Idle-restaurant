@@ -73,12 +73,28 @@ namespace Project.Core
         public static bool TryLoad(GameState state, GameConfigSO config, StaffSystem staffSystem)
         {
             if (!HasSave()) return false;
+            if (config == null)
+            {
+                Debug.LogError("[SaveManager] TryLoad: config null — fresh state 로 시작.");
+                return false;
+            }
             try
             {
                 var json = PlayerPrefs.GetString(SaveKey);
                 if (string.IsNullOrEmpty(json)) return false;
                 var data = JsonUtility.FromJson<GameStateSaveData>(json);
-                if (data == null || data.version != 1) return false;
+                if (data == null)
+                {
+                    Debug.LogWarning("[SaveManager] 세이브 JSON 파싱 실패 — fresh state 로 시작.");
+                    return false;
+                }
+                if (data.version != 1)
+                {
+                    Debug.LogWarning(
+                        $"[SaveManager] 세이브 version 불일치 (saved={data.version}, current=1). " +
+                        "fresh state 로 시작. 진행 손실 방지가 필요하면 'Idle Restaurant > Debug > Print Save Json' 으로 백업 후 마이그레이션 코드 추가.");
+                    return false;
+                }
 
                 state.Day = Mathf.Max(1, data.day);
                 state.Cash = data.cash;

@@ -93,8 +93,10 @@ namespace Project.UI
             initialized = true;
 
             // 이벤트 구독 후 현재 state 1회 push (initial sync).
+            // GameManager.Awake 가 config 미할당 등으로 bail-out 했을 수 있으므로 state null 방어.
             SubscribeEvents();
-            SyncAll();
+            if (gm.State != null) SyncAll();
+            else Debug.LogWarning("[UIController] gm.State 가 null — GameManager 초기화 실패. SyncAll 스킵.", this);
         }
 
         void OnDisable()
