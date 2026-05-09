@@ -22,8 +22,15 @@ namespace Project.Data
         [Tooltip("기본 가격. 메뉴 트랙 Lv 배율이 곱해진 후 최종 가격이 됨.")]
         [SerializeField, Range(0, 50)] int basePrice = 1;
 
-        [Tooltip("주문 시 이 메뉴가 포함될 확률. 0 = 절대 안 나옴, 1 = 항상 나옴")]
+        [Tooltip("주문 시 이 메뉴가 뽑힐 가중치 (상대값). 0 = 절대 안 나옴. 다른 메뉴와의 합 대비 비율로 추첨. 예: Hotdog 1.0 / Cola 0.5 → Hotdog 67%")]
         [SerializeField, Range(0f, 1f)] float generateProb = 1f;
+
+        [Header("주문 수량 (단일 메뉴 모델)")]
+        [Tooltip("주문 수량 최소값 (1 이상).")]
+        [SerializeField, Range(1, 20)] int minQty = 1;
+
+        [Tooltip("주문 수량 최대값 (minQty 이상). 예: 핫도그 1~3, 콜라 1~5")]
+        [SerializeField, Range(1, 20)] int maxQty = 3;
 
         public string Id => id;
         public string Icon => icon;
@@ -31,5 +38,13 @@ namespace Project.Data
         public int CookTimeMs => cookTimeMs;
         public int BasePrice => basePrice;
         public float GenerateProb => generateProb;
+        public int MinQty => Mathf.Max(1, minQty);
+        public int MaxQty => Mathf.Max(MinQty, maxQty);
+
+        void OnValidate()
+        {
+            if (minQty < 1) minQty = 1;
+            if (maxQty < minQty) maxQty = minQty;
+        }
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using Project.Core;
 using Project.Data;
@@ -53,7 +52,7 @@ namespace Project.Systems
                 s.StateElapsed = 0f;
                 s.TargetSeatIdx = -1;
                 s.TargetCustomerId = -1;
-                s.Order = null;
+                s.Order = default;
                 s.CookingStepIdx = 0;
                 s.CurrentStation = null;
             }
@@ -117,9 +116,10 @@ namespace Project.Systems
 
             // 손님 자리에 도착 — 주문 받기 시작.
             //   c.Order 는 이미 CustomerSystem 의 SeatedOrdering 진입 시 미리 생성됐음 (말풍선 표시용).
-            //   직원은 그 주문을 사본으로 받아감. null 이면 안전망으로 신규 생성.
-            if (c.Order == null) c.Order = customerSystem.GenerateOrder();
-            s.Order = new List<MenuItemSO>(c.Order);
+            //   직원은 그 주문을 사본으로 받아감. 비어있으면 안전망으로 신규 생성.
+            //   Order 가 struct 라서 대입만으로 자동 사본 (Item 참조는 공유, Qty 는 값 복사 — 변경 없음).
+            if (c.Order.Item == null) c.Order = customerSystem.GenerateOrder();
+            s.Order = c.Order;
             c.WaitActive = false;
             c.WaitElapsed = 0f;
             s.State = StaffState.TakingOrder;
@@ -194,15 +194,16 @@ namespace Project.Systems
 
         void StartCookingNextItem(Staff s)
         {
-            if (s.Order == null || s.CookingStepIdx >= s.Order.Count)
+            // 단일 메뉴 + 수량 모델 — Qty 회 같은 station 재방문. CookingStepIdx 가 0..Qty-1 진행도.
+            if (s.Order.Item == null || s.CookingStepIdx >= s.Order.Qty)
             {
-                // 모든 메뉴 조리 완료 → 서빙
+                // 수량만큼 모두 조리 완료 → 서빙
                 s.State = StaffState.ServingMove;
                 s.StateElapsed = 0f;
                 s.CurrentStation = null;
                 return;
             }
-            s.CurrentStation = s.Order[s.CookingStepIdx];
+            s.CurrentStation = s.Order.Item; // 항상 같은 메뉴
             s.State = StaffState.CookingMove;
             s.StateElapsed = 0f;
         }
@@ -213,7 +214,7 @@ namespace Project.Systems
             s.StateElapsed = 0f;
             s.TargetSeatIdx = -1;
             s.TargetCustomerId = -1;
-            s.Order = null;
+            s.Order = default;
             s.CookingStepIdx = 0;
             s.CurrentStation = null;
         }

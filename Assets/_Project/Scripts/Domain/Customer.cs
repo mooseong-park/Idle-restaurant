@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Project.Data;
-
 namespace Project.Domain
 {
     // 손님 FSM 단계. HTML 프로토 v0.15.1의 c.stage 문자열을 enum으로 변환.
@@ -48,8 +45,9 @@ namespace Project.Domain
         // 좌석 여유가 없을 때만 true. 실제 좌석/큐 진입은 여전히 Arriving 만료 시점에 재확인 (좌석이 비면 EnterSeat).
         public bool IsQueueBound;
 
-        // 주문 (직원이 받기 전엔 null). Day 4 시점엔 직원 시스템이 없어 항상 null.
-        public List<MenuItemSO> Order;
+        // 주문 — 단일 메뉴 + 수량. default(Order) (Item==null) 이면 "아직 주문 없음".
+        // SeatedOrdering 진입 시 CustomerSystem 이 GenerateOrder() 로 채움.
+        public Order Order;
 
         // 인내심 누적 시간 (초). queueing / seated_ordering 진행 동안만 적립.
         public float WaitElapsed;

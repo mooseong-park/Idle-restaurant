@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Project.Data;
 
 namespace Project.Domain
@@ -34,10 +33,10 @@ namespace Project.Domain
         public int TargetSeatIdx = -1;
         public int TargetCustomerId = -1;
 
-        // 주문 사본. 직원이 주방에서 한 메뉴씩 만들기 위해 보유.
-        public List<MenuItemSO> Order;
+        // 주문 사본. 단일 메뉴 + 수량 모델 — struct 라서 손님 Order 대입 시 자동 사본.
+        public Order Order;
 
-        // 현재 조리 진행 인덱스 (Order의 몇 번째 메뉴를 만들고 있는지)
+        // 현재 조리 진행 인덱스 (Order.Qty 중 몇 번째 cook 인지). 0..Qty-1 순회.
         public int CookingStepIdx;
 
         // 현재 조리 중인 스테이션의 메뉴. CookingMove/CookingItem 시에만 의미.

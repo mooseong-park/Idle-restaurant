@@ -1,6 +1,6 @@
 using UnityEngine;
+using TMPro;
 using Project.Domain;
-using Project.Data;
 using Project.Utils;
 
 namespace Project.Visual
@@ -24,18 +24,23 @@ namespace Project.Visual
         const float PieScale = 1.1f;
         float lastPiePct = -2f;
 
-        int lastBubbleItemCount = -1;
-        Sprite[] lastBubbleSprites;
+        bool bubbleLayoutApplied;
+        Sprite lastBubbleSprite;
+        TextMeshPro qtyLabel;
+        int lastQty = -1;
 
+        // 단일 메뉴 + 수량 모델 — 아이콘 1개 고정. bubbleIcons 배열 슬롯 0 만 사용,
+        // 1~2 는 hide (prefab 호환). BubbleMaxItems 는 prefab 슬롯 길이로 의미만 유지.
         const int   BubbleMaxItems     = 3;
         const float BubbleY            = 2f;     // fallback 전용
         const float BubbleHeight       = 1.6f;
         const float BubbleBaseWidth    = 1.9f;
-        const float BubblePerItemWidth = 1.25f;
         const float BubbleIconScale    = 1.05f;  // fallback 전용
-        const float BubbleIconSpacing  = 1.25f;
         const float BubbleTailY        = -0.75f; // fallback 전용
         const float BubbleTailScale    = 0.45f;  // fallback 전용
+        // Qty 라벨
+        static readonly Vector3 QtyLabelLocalPos = new Vector3(0.55f, -0.42f, 0f);
+        const float QtyLabelFontSize = 3.5f;
 
         static readonly Color PatienceHigh = new Color(0.13f, 0.77f, 0.37f);
         static readonly Color PatienceMid  = new Color(0.96f, 0.62f, 0.04f);
@@ -54,7 +59,9 @@ namespace Project.Visual
             customer = c;
             // 새 손님 bind 시 캐시 초기화 — 이전 손님 잔여 sprite 안 보이게.
             lastPiePct = -2f;
-            lastBubbleItemCount = -1;
+            bubbleLayoutApplied = false;
+            lastBubbleSprite = null;
+            lastQty = -1;
         }
 
         // 매 프레임 호출. patiencePct: 0~1 잔여, 음수면 비활성.
@@ -152,7 +159,8 @@ namespace Project.Visual
 
         void EnsureOrderBubble()
         {
-            if (bubbleGo != null) return;
+            // Prefab 경로: bubbleGo / icons 가 이미 wired 됐어도 QtyLabel 은 신규 — 항상 보장.
+            if (bubbleGo != null) { EnsureQtyLabel(); return; }
 
             // Procedural fallback — prefab 미사용 시
             bubbleGo = new GameObject("OrderBubble");
@@ -191,67 +199,92 @@ namespace Project.Visual
                 iconGo.SetActive(false);
                 bubbleIcons[i] = sr2;
             }
+            EnsureQtyLabel();
             bubbleGo.SetActive(false);
+        }
+
+        void EnsureQtyLabel()
+        {
+            if (qtyLabel != null) return;
+            var go = new GameObject("QtyLabel");
+            go.transform.SetParent(bubbleGo.transform, false);
+            go.transform.localPosition = QtyLabelLocalPos;
+            qtyLabel = go.AddComponent<TextMeshPro>();
+            qtyLabel.fontSize = QtyLabelFontSize;
+            qtyLabel.alignment = TextAlignmentOptions.Center;
+            qtyLabel.color = Color.black;
+            qtyLabel.fontStyle = FontStyles.Bold;
+            qtyLabel.enableWordWrapping = false;
+            qtyLabel.text = "";
+            var mr = qtyLabel.GetComponent<MeshRenderer>();
+            if (mr != null) mr.sortingOrder = SortingOrders.OrderBubbleIcon;
+            qtyLabel.gameObject.SetActive(false);
         }
 
         void UpdateOrderBubble()
         {
             if (bubbleGo == null) return;
 
+            // 단일 메뉴 + 수량 모델 — Order.Item == null 이면 표시 안 함.
             bool show = (customer.Stage == CustomerStage.SeatedOrdering
                       || customer.Stage == CustomerStage.SeatedWaiting)
-                     && customer.Order != null && customer.Order.Count > 0;
+                     && customer.Order.Item != null;
 
             if (!show)
             {
                 if (bubbleGo.activeSelf) bubbleGo.SetActive(false);
-                lastBubbleItemCount = -1;
+                bubbleLayoutApplied = false;
+                lastQty = -1;
                 return;
             }
             if (!bubbleGo.activeSelf) bubbleGo.SetActive(true);
 
-            int count = Mathf.Min(customer.Order.Count, BubbleMaxItems);
-
-            if (count != lastBubbleItemCount)
+            // 한번만 적용 — BG 폭 고정, icon[0] 활성, 나머지 비활성.
+            if (!bubbleLayoutApplied)
             {
-                float bgW = BubbleBaseWidth + BubblePerItemWidth * (count - 1);
-                var bgScale = bubbleBgSr.transform.localScale;
-                bgScale.x = bgW;
-                bubbleBgSr.transform.localScale = bgScale;
-
-                float startX = -((count - 1) * BubbleIconSpacing) * 0.5f;
-                for (int i = 0; i < count; i++)
+                if (bubbleBgSr != null)
                 {
-                    var sr2 = bubbleIcons[i];
-                    if (sr2 == null) continue;
-                    sr2.gameObject.SetActive(true);
-                    var p = sr2.transform.localPosition;
-                    p.x = startX + i * BubbleIconSpacing;
-                    p.y = 0f; p.z = 0f;
-                    sr2.transform.localPosition = p;
+                    var bgScale = bubbleBgSr.transform.localScale;
+                    bgScale.x = BubbleBaseWidth;
+                    bubbleBgSr.transform.localScale = bgScale;
                 }
-                for (int i = count; i < bubbleIcons.Length; i++)
-                    if (bubbleIcons[i] != null) bubbleIcons[i].gameObject.SetActive(false);
-
-                if (lastBubbleSprites == null || lastBubbleSprites.Length < BubbleMaxItems)
-                    lastBubbleSprites = new Sprite[BubbleMaxItems];
-                for (int i = 0; i < count; i++) lastBubbleSprites[i] = null;
-
-                lastBubbleItemCount = count;
+                for (int i = 0; i < bubbleIcons.Length; i++)
+                {
+                    if (bubbleIcons[i] == null) continue;
+                    bool active = (i == 0);
+                    bubbleIcons[i].gameObject.SetActive(active);
+                    if (active) bubbleIcons[i].transform.localPosition = Vector3.zero;
+                }
+                lastBubbleSprite = null;
+                bubbleLayoutApplied = true;
             }
 
-            for (int i = 0; i < count; i++)
+            // 아이콘 sprite 갱신
+            var item = customer.Order.Item;
+            Sprite sp = item != null ? item.IconSprite : null;
+            if (lastBubbleSprite != sp && bubbleIcons.Length > 0 && bubbleIcons[0] != null)
             {
-                if (bubbleIcons[i] == null) continue;
-                var item = customer.Order[i];
-                Sprite s = item != null ? item.IconSprite : null;
-                if (lastBubbleSprites[i] != s)
-                {
-                    bubbleIcons[i].sprite = s;
-                    bubbleIcons[i].enabled = (s != null);
-                    lastBubbleSprites[i] = s;
-                }
+                bubbleIcons[0].sprite = sp;
+                bubbleIcons[0].enabled = (sp != null);
+                lastBubbleSprite = sp;
             }
+
+            UpdateQtyLabel(customer.Order.Qty);
+        }
+
+        void UpdateQtyLabel(int qty)
+        {
+            if (qtyLabel == null) return;
+            if (qty == lastQty) return;
+            lastQty = qty;
+            // Qty 1 은 노이즈 — 숨김. 2 이상만 "xN" 표시.
+            if (qty <= 1)
+            {
+                if (qtyLabel.gameObject.activeSelf) qtyLabel.gameObject.SetActive(false);
+                return;
+            }
+            if (!qtyLabel.gameObject.activeSelf) qtyLabel.gameObject.SetActive(true);
+            qtyLabel.text = $"x{qty}";
         }
     }
 }
