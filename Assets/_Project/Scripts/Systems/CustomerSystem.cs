@@ -114,23 +114,39 @@ namespace Project.Systems
             return id;
         }
 
-        // 주문 생성. HTML generateOrder() 그대로:
-        //   - GenerateProb >= 1.0 인 메뉴는 항상 포함 (hotdog)
-        //   - 그 외는 확률적으로 추가 (cola 50%, salad 30%)
-        // 직원 시스템에서 호출 예정 (Day 5+). 현재는 미사용이지만 미리 작성해 검증.
-        public List<MenuItemSO> GenerateOrder()
+        // 주문 생성 — 단일 메뉴 + 수량 모델.
+        //   1) 메뉴 추첨: GenerateProb 를 가중치로 사용 (합 대비 비율). 핫도그 1.0 / 콜라 0.5 → 핫도그 67%.
+        //   2) 수량 결정: 추첨된 메뉴의 [MinQty, MaxQty] 정수 균등 분포.
+        // 직원 시스템(StaffSystem)이 손님 좌석 도착 시 c.Order 가 비어있으면 호출하기도 함 (안전망).
+        public Order GenerateOrder()
         {
-            var order = new List<MenuItemSO>();
             var menu = config.MenuItems;
-            for (int i = 0; i < menu.Count; i++)
+            if (menu.Count == 0) return default;
+
+            // 가중치 합
+            float totalWeight = 0f;
+            for (int i = 0; i < menu.Count; i++) totalWeight += menu[i].GenerateProb;
+
+            MenuItemSO picked;
+            if (totalWeight <= 0f)
             {
-                var item = menu[i];
-                if (item.GenerateProb >= 1f || random.Value() < item.GenerateProb)
-                    order.Add(item);
+                // 모든 메뉴 가중치 0 — 안전망. 첫 메뉴 사용.
+                picked = menu[0];
             }
-            // 안전망: 모든 확률이 1 미만이고 모두 실패한 경우 첫 메뉴 강제. 현재 데이터에선 발생 X.
-            if (order.Count == 0 && menu.Count > 0) order.Add(menu[0]);
-            return order;
+            else
+            {
+                float r = random.Value() * totalWeight;
+                float acc = 0f;
+                picked = menu[menu.Count - 1]; // 부동소수 오차 방어용 fallback
+                for (int i = 0; i < menu.Count; i++)
+                {
+                    acc += menu[i].GenerateProb;
+                    if (r <= acc) { picked = menu[i]; break; }
+                }
+            }
+
+            int qty = random.Range(picked.MinQty, picked.MaxQty + 1); // [MinQty, MaxQty] inclusive
+            return new Order { Item = picked, Qty = qty };
         }
 
         // ===== 내부 로직 =====
@@ -238,7 +254,7 @@ namespace Project.Systems
             c.WaitElapsed = 0f;
             c.WaitActive = false; // 좌석에 앉으면 인내심 카운트 안 함 (Idle 톤). 인내심은 큐에서만 작동.
             // 주문을 SeatedOrdering 진입 시 미리 생성 → 손님 머리 위 말풍선에 즉시 표시 가능.
-            if (c.Order == null) c.Order = GenerateOrder();
+            if (c.Order.Item == null) c.Order = GenerateOrder();
             waitingOrderQueue.Add(c.Id);
         }
 

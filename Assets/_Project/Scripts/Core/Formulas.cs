@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 using Project.Data;
+using Project.Domain;
 
 namespace Project.Core
 {
@@ -56,14 +56,13 @@ namespace Project.Core
         public static bool TrackMaxed(TrackConfigSO track, int currentLv)
             => track.MaxLv > 0 && currentLv >= track.MaxLv;
 
-        // ===== 주문 가격 (메뉴 가격 합 × 메뉴 Lv 배율, 반올림) =====
+        // ===== 주문 가격 (단일 메뉴 × 수량 × 메뉴 Lv 배율, 반올림) =====
 
-        public static int OrderTotalPrice(IReadOnlyList<MenuItemSO> order, int menuLv, GameConfigSO cfg)
+        public static int OrderTotalPrice(Order order, int menuLv, GameConfigSO cfg)
         {
+            if (order.Item == null || order.Qty <= 0) return 0;
             float mult = PriceMult(menuLv, cfg);
-            float sum = 0f;
-            for (int i = 0; i < order.Count; i++) sum += order[i].BasePrice * mult;
-            return Mathf.RoundToInt(sum);
+            return Mathf.RoundToInt(order.Item.BasePrice * order.Qty * mult);
         }
 
         // ===== 명성 Lv 계산 (누적 ⭐ 기반) =====

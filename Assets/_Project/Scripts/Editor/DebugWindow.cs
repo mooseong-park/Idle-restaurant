@@ -179,14 +179,11 @@ namespace Project.EditorTools
             var sb = new StringBuilder();
             if (c.IsQueueBound) sb.Append("[qb] ");
             if (c.WaitActive) sb.Append($"wait {c.WaitElapsed:F1}s ");
-            if (c.Order != null && c.Order.Count > 0)
+            if (c.Order.Item != null && c.Order.Qty > 0)
             {
                 sb.Append("order:");
-                for (int i = 0; i < c.Order.Count; i++)
-                {
-                    if (i > 0) sb.Append(",");
-                    sb.Append(c.Order[i].Id);
-                }
+                sb.Append(c.Order.Item.Id);
+                if (c.Order.Qty > 1) sb.Append($" x{c.Order.Qty}");
             }
             if (c.LastRevenue > 0) sb.Append($" $+{c.LastRevenue}");
             return sb.ToString();
@@ -196,7 +193,8 @@ namespace Project.EditorTools
         {
             var sb = new StringBuilder();
             if (s.CurrentStation != null) sb.Append($"station:{s.CurrentStation.Id} ");
-            if (s.Order != null && s.Order.Count > 0) sb.Append($"order×{s.Order.Count} ");
+            if (s.Order.Item != null && s.Order.Qty > 0)
+                sb.Append($"order:{s.Order.Item.Id}×{s.Order.Qty}({s.CookingStepIdx}/{s.Order.Qty}) ");
             sb.Append($"t {s.StateElapsed:F1}s");
             return sb.ToString();
         }
