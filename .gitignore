@@ -60,3 +60,6 @@ crashlytics-build.properties
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code agent worktrees (subagent 작업 격리 폴더)
+.claude/worktrees/
