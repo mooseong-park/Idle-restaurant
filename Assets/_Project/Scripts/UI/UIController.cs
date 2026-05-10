@@ -5,6 +5,7 @@ using Project.Core;
 using Project.Core.Events;
 using Project.Data;
 using Project.Systems;
+using Project.Utils;
 
 namespace Project.UI
 {
@@ -161,7 +162,7 @@ namespace Project.UI
 
         void HandleCash(float v)
         {
-            if (cashLabel != null) cashLabel.text = $"💰 ${v:F0}";
+            if (cashLabel != null) cashLabel.text = $"💰 ${BigNumber.Fmt(v)}";
             // Cash 변동은 트랙 affordability 에 영향 → 카드 색 갱신 필요.
             RefreshTrackCardAffordability();
         }
@@ -213,7 +214,7 @@ namespace Project.UI
                 if (dayEndTitle != null) dayEndTitle.text = $"Day {r.Day}  " + (r.Achieved ? "🎉 목표 달성" : "목표 미달");
                 if (dayEndBody != null)
                     dayEndBody.text =
-                        $"💰 ${r.Revenue:F0} / ${r.Goal}\n" +
+                        $"💰 ${BigNumber.Fmt(r.Revenue)} / ${BigNumber.Fmt(r.Goal)}\n" +
                         $"💎 +{r.GemReward}" + (r.StarEarned > 0 ? $"   ⭐ +{r.StarEarned}" : "") +
                         (r.LeveledUp ? $"\n🆙 명성 Lv {r.NewLv} 달성!" : "");
             }
@@ -226,7 +227,7 @@ namespace Project.UI
             if (goalLabel == null) return;
             var s = gm.State;
             var rep = Formulas.ComputeRep(s.Rating, gm.Config.RepLevelTable);
-            goalLabel.text = $"Lv {rep.Lv}  ${s.DayRevenue:F0} / ${rep.Goal}" + (rep.IsMax ? "  (MAX)" : "");
+            goalLabel.text = $"Lv {rep.Lv}  ${BigNumber.Fmt(s.DayRevenue)} / ${BigNumber.Fmt(rep.Goal)}" + (rep.IsMax ? "  (MAX)" : "");
             if (goalBar != null) goalBar.value = Mathf.Min(100f, s.DayRevenue / Mathf.Max(1f, rep.Goal) * 100f);
         }
 
@@ -245,7 +246,7 @@ namespace Project.UI
                 entry.LvPill.text = $"Lv {lv}";
                 entry.PreviewCurrent.text = TrackPreview(t, lv);
                 entry.PreviewNext.text = maxed ? "MAX" : TrackPreview(t, lv + 1);
-                entry.UpgradeCost.text = maxed ? "MAX" : $"${cost}";
+                entry.UpgradeCost.text = maxed ? "MAX" : $"${BigNumber.Fmt(cost)}";
 
                 bool dim = maxed || !affordable;
                 entry.UpgradeBtn.EnableInClassList("disabled", dim);
@@ -497,7 +498,7 @@ namespace Project.UI
             if (gm.DaySystem.Phase != DayPhase.Playing) return;
             var result = gm.TrackSystem.TryUpgrade(track);
             if (result == TrackSystem.BuyResult.Success)
-                Debug.Log($"[Track] {track.DisplayName} → Lv {gm.TrackSystem.GetLv(track)} (잔여 ${gm.State.Cash:F0})");
+                Debug.Log($"[Track] {track.DisplayName} → Lv {gm.TrackSystem.GetLv(track)} (잔여 ${BigNumber.Fmt(gm.State.Cash)})");
         }
 
         void OnGachaClicked(StaffPackSO pack)

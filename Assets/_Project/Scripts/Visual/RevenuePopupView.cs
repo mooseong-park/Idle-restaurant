@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using Project.Core;
 using Project.Data;
+using Project.Utils;
 
 namespace Project.Visual
 {
@@ -45,7 +46,7 @@ namespace Project.Visual
                 rt.sizeDelta = new Vector2(2f, 1f);
             }
             tmp.fontSize = FontSize;
-            tmp.text = $"+${amount}";
+            tmp.text = $"+${BigNumber.Fmt(amount)}";
             tmp.color = color;
             elapsed = 0f;
         }
