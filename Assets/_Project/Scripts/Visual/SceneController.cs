@@ -175,6 +175,7 @@ namespace Project.Visual
         void SyncStaff(float dt)
         {
             var list = gm.StaffSystem.Staffs;
+            float spdMult = Formulas.StaffSpdMult(gm.State.StaffLv, gm.Config);
             for (int i = 0; i < list.Count; i++)
             {
                 var s = list[i];
@@ -183,8 +184,19 @@ namespace Project.Visual
                     view = CreateStaffView(s, i);
                     staffViews[s.Id] = view;
                 }
-                view.UpdateView(dt);
+                view.UpdateView(ComputeCookingPct(s, spdMult), dt);
             }
+        }
+
+        // CookingItem 일 때만 잔여 비율 (1 → 0). 그 외 상태/데이터 결손 시 -1 (overlay 비활성).
+        static float ComputeCookingPct(Domain.Staff s, float spdMult)
+        {
+            if (s.State != Domain.StaffState.CookingItem) return -1f;
+            var item = s.CurrentStation;
+            if (item == null || s.Rarity == null) return -1f;
+            float cookSec = (item.CookTimeMs / 1000f) * s.Rarity.CookMult * spdMult;
+            if (cookSec <= 0f) return -1f;
+            return Mathf.Clamp01(1f - s.StateElapsed / cookSec);
         }
 
         static float ComputePatiencePct(Customer c, float queueLimit, float seatedLimit)

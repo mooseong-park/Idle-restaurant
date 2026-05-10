@@ -7,6 +7,7 @@ namespace Project.Visual
 {
     // 직원 1명 시각 표현 (slim — 책임 분리 후).
     // - 이동/bob: CharacterMover (POCO, idle bob 모드 활성)
+    // - 조리 진행 파이: StaffUIOverlay (sibling 컴포넌트)
     // - 본 클래스: state 기반 target world 계산 + body sprite 자체.
     [DisallowMultipleComponent]
     public sealed class StaffView : MonoBehaviour
@@ -18,6 +19,7 @@ namespace Project.Visual
         Staff staff;
         int idleSlot;
         SceneAnchors anchors;
+        StaffUIOverlay overlay;
         readonly CharacterMover mover = new CharacterMover
         {
             // 직원 기본값 (VisualSettings 없을 때 폴백).
@@ -37,6 +39,10 @@ namespace Project.Visual
             if (sr.sortingOrder < SortingOrders.StaffBody) sr.sortingOrder = SortingOrders.StaffBody;
             if (transform.localScale == Vector3.one)
                 transform.localScale = new Vector3(0.85f, 0.85f, 1f);
+
+            // Overlay sibling — prefab 에 wired 안 됐으면 자동 생성 (CustomerView 와 동일 패턴).
+            overlay = GetComponent<StaffUIOverlay>();
+            if (overlay == null) overlay = gameObject.AddComponent<StaffUIOverlay>();
 
             if (visualSettings != null)
             {
@@ -60,15 +66,18 @@ namespace Project.Visual
             Vector3 startPos = anchors != null ? anchors.StaffSlotPos(slot) : Vector3.zero;
             transform.position = startPos;
             mover.Reset(startPos);
+            overlay?.Bind(s);
         }
 
+        // cookingPct: 0~1 잔여 비율 (CookingItem 상태일 때만), 음수면 비활성.
         // dt: SceneController 가 gameSpeed 반영해 전달. 일시정지 시 시각/idle bob 모두 정지.
-        public void UpdateView(float dt)
+        public void UpdateView(float cookingPct, float dt)
         {
             if (staff == null || anchors == null) return;
             Vector3 target = TargetWorld(staff, idleSlot, anchors);
             // Idle 상태에서 정지하면 호흡 같은 미세 bob 활성.
             transform.position = mover.Tick(dt, target, enableIdleBob: staff.State == StaffState.Idle);
+            overlay?.UpdateOverlay(cookingPct);
         }
 
         static Vector3 TargetWorld(Staff s, int idleSlot, SceneAnchors anchors)
